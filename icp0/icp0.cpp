@@ -1,4 +1,4 @@
-// icp0.cpp : définit le point d'entrée pour l'application console.
+// icp0.cppÂ : dÃ©finit le point d'entrÃ©e pour l'application console.
 //
 
 #include "stdafx.h"
@@ -107,6 +107,8 @@ void CalculateRotation(vector<Point3D> &P, vector<Point3D> &X, Rotation &R){
 
 	//calculate the largest eigen value and its correspondant eigen vector
 	float eigenVect[16];
+	for (int i=0; i<4; i++){
+		
 
 
 int _tmain(int argc, _TCHAR* argv[])
