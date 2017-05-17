@@ -5,8 +5,10 @@
 #include<algorithm>
 #include<vector>
 #include<iostream>
+#include<Eigen/Dense>
+#include<Eigen/Eigenvalues>
 
-
+using namespace Eigen;
 using namespace std;
 
 typedef struct Point3D
@@ -69,8 +71,7 @@ void FindCorrespondingPoint(vector<Point3D> &P, vector<Point3D> &Q, vector<Point
 void CalculateRotation(vector<Point3D> &P, vector<Point3D> &X, Rotation &R){
 	//build covariance matrix between P and X
 	float cov[9]={0,0,0,0,0,0,0,0,0};
-	vector<Point3D>::iterator itx,itp;
-	for (itp=P.begin(),itx=X.begin();itp!=P.end();itp++,itx++){
+	vector<Point3D>::iterator itx,itp;	for (itp=P.begin(),itx=X.begin();itp!=P.end();itp++,itx++){
 		cov[0] += (itp->x)*(itx->x)/P.size();//(1,1)
 		cov[1] += (itp->x)*(itx->y)/P.size();//(1,2)
 		cov[2] += (itp->x)*(itx->z)/P.size();//(1,3) 
@@ -105,11 +106,7 @@ void CalculateRotation(vector<Point3D> &P, vector<Point3D> &X, Rotation &R){
 	Q[14] = cov[5]+cov[7];
 	Q[15] = cov[8]-cov[0]-cov[4];
 
-	//calculate the largest eigen value and its correspondant eigen vector
-	float eigenVect[16];
-	for (int i=0; i<4; i++){
-		
-
+	
 
 int _tmain(int argc, _TCHAR* argv[])
 {
