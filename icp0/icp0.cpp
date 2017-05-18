@@ -113,17 +113,67 @@ void CalculateRotation(vector<Point3D> &P, vector<Point3D> &X, Rotation &R){
 	Matrix4f D = es.pseudoEigenvalueMatrix();
 	Matrix4f V = es.pseudoEigenvectors();
 
-	float biggestValue=A(0,0);
+	float biggestValue=D(0,0);
 	int pos=0;
 	for (int i=1; i<4; i++){
-        if (biggestValue<A(i,i)){biggestValue=A(i,i);pos=i;}
+        if (biggestValue<D(i,i)){biggestValue=D(i,i);pos=i;}
 	}
+	float q[]={V(0,pos), V(1,pos), V(2,pos), V(3,pos)};
+	
+	//calculate rotation matrix with unit quaternion
+	R.x1 = q[0]*q[0]+q[1]*q[1]-q[2]*q[2]-q[3]*q[3];//(1,1)
+	R.y1 = 2*(q[1]*q[2]-q[0]*q[3]);//(1,2)
+	R.z1 = 2*(q[1]*q[3]+q[0]*q[2]);//(1,3)
+	R.x2 = 2*(q[1]*q[2]+q[0]*q[3]);//(2,1)
+	R.y2 = q[0]*q[0]-q[1]*q[1]+q[2]*q[2]-q[3]*q[3];//(2,2)
+	R.z2 = 2*(q[2]*q[3]-q[0]*q[1]);//(2,3)
+	R.x3 = 2*(q[1]*q[3]-q[0]*q[2]);//(3,1)
+	R.y3 = 2*(q[2]*q[3]+q[0]*q[1]);//(3,2)
+	R.z3 = q[0]*q[0]-q[1]*q[1]-q[2]*q[2]+q[3]*q[3];//(3,3)
 }
 
-	
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+	
+	FILE *fp=NULL;
+	float f;
+	Point3D xyz,T,mean;
+	Rotation R;
+	vector<Point3D> P,X,Q;
+
+	char* F_PATH="C:\Users\li\Desktop\Localization\Data\bunny.asc"; 
+	//int iLength ;  
+	//iLength = WideCharToMultiByte(CP_ACP, 0, argv[1], -1, NULL, 0, NULL, NULL);      
+	//WideCharToMultiByte(CP_ACP, 0, argv[1], -1, F_PATH, iLength, NULL, NULL);
+	fp=fopen(F_PATH,"r");
+	while(fscanf(fp,"%f",&f)){
+		xyz.x=f;printf("%f/n",f);
+		fscanf(fp,"%f",&f);
+		xyz.y=f;
+		fscanf(fp,"%f",&f);
+		xyz.z=f;
+		P.push_back(xyz);
+	}
+	if (fclose(fp)) {printf("error, file fails to close./n");}
+	fp=NULL;
+
+	/*F_PATH="C:\Users\li\Desktop\Localization\Data\bunny_perturbed.asc";
+	//iLength = WideCharToMultiByte(CP_ACP, 0, argv[1], -1, NULL, 0, NULL, NULL);      
+	//WideCharToMultiByte(CP_ACP, 0, argv[2], -1, F_PATH, iLength, NULL, NULL);
+	fp=fopen(F_PATH,"r");
+	while(fscanf(fp,"%f",&f)){
+		xyz.x=f;
+		fscanf(fp,"%f",&f);
+		xyz.y=f;
+		fscanf(fp,"%f",&f);
+		xyz.z=f;
+		Q.push_back(xyz);
+	}
+	if (fclose(fp)) {printf("error, file fails to close./n");}
+	fp=NULL;*/
+
+
 	return 0;
 }
 
