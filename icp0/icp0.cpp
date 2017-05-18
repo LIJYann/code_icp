@@ -105,6 +105,20 @@ void CalculateRotation(vector<Point3D> &P, vector<Point3D> &X, Rotation &R){
 	Q[13] = cov[2]+cov[6];
 	Q[14] = cov[5]+cov[7];
 	Q[15] = cov[8]-cov[0]-cov[4];
+	
+	Matrix4f A;
+	A << Q[0], Q[1], Q[2], Q[3], Q[4], Q[5], Q[6], Q[7], Q[8], Q[9], Q[10], Q[11], Q[12], Q[13], Q[14], Q[15];
+	EigenSolver<Matrix4f> es(A);
+
+	Matrix4f D = es.pseudoEigenvalueMatrix();
+	Matrix4f V = es.pseudoEigenvectors();
+
+	float biggestValue=A(0,0);
+	int pos=0;
+	for (int i=1; i<4; i++){
+        if (biggestValue<A(i,i)){biggestValue=A(i,i);pos=i;}
+	}
+}
 
 	
 
